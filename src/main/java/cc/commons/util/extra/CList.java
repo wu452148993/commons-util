@@ -44,7 +44,7 @@ public class CList<E>extends ArrayList<E>{
      */
     public E oneGet(){
         if(this.size()!=1) throw new IllegalStateException("Not Only One Element");
-        return this.first();
+        return this.get(0);
     }
 
 }

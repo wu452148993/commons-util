@@ -165,6 +165,14 @@ public class ClassUtil{
         return ClassUtil.getClass(ClassUtil.getClassPacket(pSiblingClazz.getName())+pShortName);
     }
 
+    public static <T> Constructor<T> getConstrouctor(Class<T> pClazz,Class<?>...pParamTypes){
+        try{
+            return pClazz.getDeclaredConstructor(pParamTypes);
+        }catch(NoSuchMethodException|SecurityException exp){
+            throw new IllegalStateException(REFLACT_OP_ERROR,exp);
+        }
+    }
+    
     /**
      * 使用无参构造函数实例化类
      * 
@@ -291,9 +299,9 @@ public class ClassUtil{
         pPackage=pPackage.replace('/','.');
         String tFixPackageName=StringUtil.isEmpty(pPackage)?"":pPackage.endsWith(".")?pPackage:pPackage+'.';
         Enumeration<URL> tURLs=Thread.currentThread().getContextClassLoader().getResources(tPackageDir);
-        if(!tURLs.hasMoreElements()) tURLs=ClassUtil.class.getClassLoader().getResources(tPackageDir);
+        if(tURLs==null||!tURLs.hasMoreElements()) tURLs=ClassUtil.class.getClassLoader().getResources(tPackageDir);
 
-        while(tURLs.hasMoreElements()){
+        while(tURLs!=null&&tURLs.hasMoreElements()){
             URL tURL=tURLs.nextElement();
             String tProtocol=tURL.getProtocol();
 
